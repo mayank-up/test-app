@@ -1,21 +1,28 @@
-
-"use client"
+'use client';
 
 export default function Home() {
-
   const launchIntent = (phoneNumber: string, content: string) => {
-    let intent = 'intent:#Intent;package=com.google.android.apps.messaging;type=text/plain;action=android.intent.action.SEND;S.text=Hello;S.address=1234567898;end';
-    intent = intent.replace(/S\.text=[^;]*/i, `S.text=${encodeURIComponent(content)}`).replace(/S\.address=[^;]*/i, `S.address=${encodeURIComponent(phoneNumber)}`);
-      window.location.href = intent;
-  }
+    const encodedPhone = encodeURIComponent(phoneNumber);
+    const encodedText = encodeURIComponent(content);
+    const intent = `intent:smsto:${encodedPhone}#Intent;` + `action=android.intent.action.SENDTO;` + `package=com.google.android.apps.messaging;` + `S.text=${encodedText};end`;
+
+    window.location.href = intent;
+  };
 
   const launchDefault = (phoneNumber: string, content: string) => {
     window.open(`smsto:${phoneNumber}?body=${encodeURIComponent(content)}`, '_blank');
-  }
+  };
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <button className="border-2 bg-black text-white text-xl py-4 px-10" onClick={() => launchIntent('+918859167328','Hello world')}>Intent</button>
-      <button className="border-2 bg-black text-white text-xl py-4 px-10" onClick={() => launchDefault('+918859167328','Hello world')}>Default</button>
+    <div className="flex flex-col justify-center items-center min-h-screen">
+      <p className="text-xl font-semibold mb-5">Version: 0.0.2</p>
+      <div className="">
+        <button className="border-2 bg-black text-white text-xl py-4 px-10" onClick={() => launchIntent('+918859167328', 'Hello world')}>
+          Intent
+        </button>
+        <button className="border-2 bg-black text-white text-xl py-4 px-10" onClick={() => launchDefault('+918859167328', 'Hello world')}>
+          Default
+        </button>
+      </div>
     </div>
   );
 }
