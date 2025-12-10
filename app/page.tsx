@@ -34,6 +34,20 @@ export default function Home() {
     window.location.href = intent;
   };
 
+  const launchIntentSMS = () => {
+    if (!phoneNumber || !message) {
+      alert('Please enter both phone number and message.');
+      return;
+    }
+
+    const encodedPhone = encodeURIComponent(phoneNumber);
+    const encodedText = encodeURIComponent(message);
+
+    const intent = `intent:sms:${encodedPhone}?body=${encodedText}#Intent;action=android.intent.action.SENDTO;package=${selectedApp};end`;
+
+    window.location.href = intent;
+  };
+
   const launchDefault = () => {
     if (!phoneNumber || !message) {
       alert('Please enter both phone number and message.');
@@ -78,12 +92,18 @@ export default function Home() {
         </select>
 
         {/* Buttons */}
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-4">
           <button
             className="flex-1 border-2 bg-black text-white text-xl py-3 rounded"
             onClick={launchIntent}
           >
             Launch Intent
+          </button>
+          <button
+            className="flex-1 border-2 bg-black text-white text-xl py-3 rounded"
+            onClick={launchIntentSMS}
+          >
+            Launch Intent SMS 
           </button>
           <button
             className="flex-1 border-2 bg-black text-white text-xl py-3 rounded"
