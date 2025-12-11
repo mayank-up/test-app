@@ -18,6 +18,8 @@ export default function Home() {
     { name: 'Samsung Messages', value: 'com.samsung.android.messaging' },
     { name: 'Simple SMS Messenger - 10L+', value: 'com.simplemobiletools.smsmessenger' },
     { name: 'Pulse SMS - 10L+', value: 'xyz.klinker.messenger' },
+    { name: 'Messages - OPPO', value: 'com.android.mms' },
+    { name: 'Messages - OPPO New', value: 'com.coloros.sms' },
   ];
 
   const launchIntent = () => {
@@ -44,7 +46,7 @@ export default function Home() {
     const encodedText = encodeURIComponent(message);
 
     const intent = `intent:sms:${encodedPhone}?body=${encodedText}#Intent;action=android.intent.action.SENDTO;package=${selectedApp};end`;
-const smsUrl = `smsto:${phoneNumber}?body=${encodeURIComponent(message)}`
+    const smsUrl = `smsto:${phoneNumber}?body=${encodeURIComponent(message)}`
    
 
     try {
@@ -62,7 +64,6 @@ const smsUrl = `smsto:${phoneNumber}?body=${encodeURIComponent(message)}`
     }
     window.open(`smsto:${phoneNumber}?body=${encodeURIComponent(message)}`, '_blank');
   };
-
 
   const launchIntentGeneric = () => {
     if (!phoneNumber || !message) {
