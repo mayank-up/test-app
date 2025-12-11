@@ -44,8 +44,15 @@ export default function Home() {
     const encodedText = encodeURIComponent(message);
 
     const intent = `intent:sms:${encodedPhone}?body=${encodedText}#Intent;action=android.intent.action.SENDTO;package=${selectedApp};end`;
+const smsUrl = `smsto:${phoneNumber}?body=${encodeURIComponent(message)}`
+   
 
-    window.location.href = intent;
+    try {
+      window.location.href = intent;
+    } catch (e) {
+      // Absolute fallback
+      window.location.href = smsUrl;
+    }
   };
 
   const launchDefault = () => {
@@ -54,6 +61,20 @@ export default function Home() {
       return;
     }
     window.open(`smsto:${phoneNumber}?body=${encodeURIComponent(message)}`, '_blank');
+  };
+
+
+  const launchIntentGeneric = () => {
+    if (!phoneNumber || !message) {
+      alert('Please enter both phone number and message.');
+      return;
+    }
+
+    const encodedPhone = encodeURIComponent(phoneNumber);
+    const encodedText = encodeURIComponent(message);
+
+    const intent = `intent:smsto:${encodedPhone}?body=${encodedText}#Intent;action=android.intent.action.SENDTO;end`;
+    window.location.href = intent;
   };
 
   return (
@@ -101,9 +122,15 @@ export default function Home() {
           </button>
           <button
             className="flex-1 border-2 bg-black text-white text-xl py-3 rounded"
+            onClick={launchIntentGeneric}
+          >
+            Launch Generic Intent
+          </button>
+          <button
+            className="flex-1 border-2 bg-black text-white text-xl py-3 rounded"
             onClick={launchIntentSMS}
           >
-            Launch Intent SMS 
+            Launch Intent SMS Scheme 
           </button>
           <button
             className="flex-1 border-2 bg-black text-white text-xl py-3 rounded"
