@@ -69,7 +69,48 @@ export default function FlowOne() {
     const encodedPhone = encodeURIComponent(phoneNumber);
     const encodedText = encodeURIComponent(message);
 
-    const intent =  `intent:#Intent;action=android.intent.action.SENDTO;data=sms:${encodedPhone};package=${selectedApp};S.android.intent.extra.TEXT=${encodedText};S.sms_body=${encodedText};end`
+    const intent = `intent://send?address=${encodedPhone}&body=${encodedText}#Intent;scheme=sms;package=${selectedApp};action=android.intent.action.VIEW;end`
+  
+    window.location.href = intent;
+  };
+
+  const launchIntent5 = () => {
+    if (!phoneNumber || !message) {
+      alert('Please enter both phone number and message.');
+      return;
+    }
+    const encodedPhone = encodeURIComponent(phoneNumber);
+    const encodedText = encodeURIComponent(message);
+const intent = `intent://sms:${encodedPhone}#Intent;action=android.intent.action.SENDTO;package=${selectedApp};S.sms_body=${encodedText};end`
+
+  
+    window.location.href = intent;
+  };
+  const launchIntent6 = () => {
+    if (!phoneNumber || !message) {
+      alert('Please enter both phone number and message.');
+      return;
+    }
+    const encodedPhone = encodeURIComponent(phoneNumber);
+    const encodedText = encodeURIComponent(message);
+
+    const intent = `intent:#Intent;action=android.intent.action.SENDTO;type=vnd.android-dir/mms-sms;package=${selectedApp};S.address=${encodedPhone};S.sms_body=${encodedText};end`
+  
+    window.location.href = intent;
+  };
+
+  const launchIntent7 = () => {
+    if (!phoneNumber || !message) {
+      alert('Please enter both phone number and message.');
+      return;
+    }
+    const encodedPhone = encodeURIComponent(phoneNumber);
+    const encodedText = encodeURIComponent(message);
+
+    const intent =`intent://sms:${encodedPhone}#Intent;action=android.intent.action.SENDTO;package=${selectedApp};S.sms_body=${encodedText};end`
+
+
+
   
     window.location.href = intent;
   };
@@ -149,6 +190,15 @@ export default function FlowOne() {
           </button>
           <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntent4}>
             Launch Intent 4
+          </button>
+          <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntent5}>
+            Launch Intent 5
+          </button>
+          <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntent6}>
+            Launch Intent 6
+          </button>
+          <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntent7}>
+            Launch Intent 7
           </button>
           {/* <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntentGeneric}>
             Launch Generic Intent
