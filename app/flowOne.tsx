@@ -61,6 +61,20 @@ export default function FlowOne() {
     window.location.href = intent;
   };
 
+  const launchIntent4 = () => {
+    if (!phoneNumber || !message) {
+      alert('Please enter both phone number and message.');
+      return;
+    }
+    const encodedPhone = encodeURIComponent(phoneNumber);
+    const encodedText = encodeURIComponent(message);
+
+    const intent =  `intent:#Intent;action=android.intent.action.SENDTO;data=sms:${encodedPhone};package=${selectedApp};S.android.intent.extra.TEXT=${encodedText};S.sms_body=${encodedText};end`
+  
+    window.location.href = intent;
+  };
+
+
   const launchIntentSMS = () => {
     if (!phoneNumber || !message) {
       alert('Please enter both phone number and message.');
@@ -132,6 +146,9 @@ export default function FlowOne() {
           </button>
           <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntent3}>
             Launch Intent 3
+          </button>
+          <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntent4}>
+            Launch Intent 4
           </button>
           {/* <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntentGeneric}>
             Launch Generic Intent
