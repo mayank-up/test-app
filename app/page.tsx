@@ -32,7 +32,19 @@ export default function Home() {
     const encodedText = encodeURIComponent(message);
 
     const intent = `intent:smsto:${encodedPhone}?body=${encodedText}#Intent;action=android.intent.action.SENDTO;package=${selectedApp};end`;
+    window.location.href = intent;
+  };
 
+  const launchIntent2 = () => {
+    if (!phoneNumber || !message) {
+      alert('Please enter both phone number and message.');
+      return;
+    }
+    const encodedPhone = encodeURIComponent(phoneNumber);
+    const encodedText = encodeURIComponent(message);
+
+    const intent = `intent://send/${encodedPhone}#Intent;scheme=smsto;package=${selectedApp};S.sms_body=${encodeURIComponent(encodedText)};S.address=${encodedPhone};end`;
+  
     window.location.href = intent;
   };
 
@@ -46,8 +58,7 @@ export default function Home() {
     const encodedText = encodeURIComponent(message);
 
     const intent = `intent:sms:${encodedPhone}?body=${encodedText}#Intent;action=android.intent.action.SENDTO;package=${selectedApp};end`;
-    const smsUrl = `smsto:${phoneNumber}?body=${encodeURIComponent(message)}`
-   
+    const smsUrl = `smsto:${phoneNumber}?body=${encodeURIComponent(message)}`;
 
     try {
       window.location.href = intent;
@@ -84,28 +95,13 @@ export default function Home() {
 
       <div className="flex flex-col gap-4 w-full max-w-md">
         {/* Phone Number */}
-        <input
-          type="tel"
-          placeholder="Enter phone number"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          className="border p-2 rounded text-lg"
-        />
+        <input type="tel" placeholder="Enter phone number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} className="border p-2 rounded text-lg" />
 
         {/* Message */}
-        <textarea
-          placeholder="Enter message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="border p-2 rounded text-lg resize-none h-24"
-        />
+        <textarea placeholder="Enter message" value={message} onChange={(e) => setMessage(e.target.value)} className="border p-2 rounded text-lg resize-none h-24" />
 
         {/* App Dropdown */}
-        <select
-          value={selectedApp}
-          onChange={(e) => setSelectedApp(e.target.value)}
-          className="border p-2 rounded text-lg"
-        >
+        <select value={selectedApp} onChange={(e) => setSelectedApp(e.target.value)} className="border p-2 rounded text-lg">
           {smsApps.map((app) => (
             <option key={app.value} value={app.value}>
               {app.name}
@@ -115,28 +111,19 @@ export default function Home() {
 
         {/* Buttons */}
         <div className="flex flex-col gap-4">
-          <button
-            className="flex-1 border-2 bg-black text-white text-xl py-3 rounded"
-            onClick={launchIntent}
-          >
+          <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntent}>
             Launch Intent
           </button>
-          <button
-            className="flex-1 border-2 bg-black text-white text-xl py-3 rounded"
-            onClick={launchIntentGeneric}
-          >
+          <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntent2}>
+            Launch Intent 2
+          </button>
+          <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntentGeneric}>
             Launch Generic Intent
           </button>
-          <button
-            className="flex-1 border-2 bg-black text-white text-xl py-3 rounded"
-            onClick={launchIntentSMS}
-          >
-            Launch Intent SMS Scheme 
+          <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchIntentSMS}>
+            Launch Intent SMS Scheme
           </button>
-          <button
-            className="flex-1 border-2 bg-black text-white text-xl py-3 rounded"
-            onClick={launchDefault}
-          >
+          <button className="flex-1 border-2 bg-black text-white text-xl py-3 rounded" onClick={launchDefault}>
             Launch Default
           </button>
         </div>
