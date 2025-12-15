@@ -3,8 +3,8 @@
 import { useState } from 'react';
 
 export default function FlowOne() {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [message, setMessage] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('8859167328');
+  const [message, setMessage] = useState('Hello world! This is the test content');
   const [selectedApp, setSelectedApp] = useState('com.google.android.apps.messaging');
 
   const smsApps = [
