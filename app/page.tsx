@@ -12,7 +12,7 @@ export default function Home() {
 
   const stage = 'https://redirection-handler.alpha.stage-upswing.one'
   const local = 'http://localhost:8080'
-  const BASE = window.origin.includes('localhost')?local:stage
+  const BASE = typeof window !== 'undefined' && window.origin.includes('localhost')?local:stage
   const redirectionHandler = `${BASE}/redirect/cct-auto-closure`;
 
 
