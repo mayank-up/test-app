@@ -14,7 +14,7 @@ export default function Home() {
   const local = 'http://localhost:8080'
   const BASE = typeof window !== 'undefined' && window.origin.includes('localhost')?local:stage
   const redirectionHandler = `${BASE}/redirect/cct-auto-closure`;
-
+  // https://sample-partner-webapp.web.app/ACME?action=webview&redirect=deeplink-manager/fd/VIEW_TEST_MODULE
 
   const [countdown, setCountdown] = useState<number | null>(null);
 
@@ -37,6 +37,11 @@ export default function Home() {
     setCountdown(3);
   };
 
+  const openApp = () => {
+    window.location.href =
+      "https://sample-partner-webapp.web.app/ACME?action=webview&redirect=deeplink-manager/fd/VIEW_TEST_MODULE";
+  };
+
   return (
     <div className="flex flex-col gap-5 justify-center items-center h-screen" style={{ padding: "20px" }}>
     
@@ -46,6 +51,9 @@ export default function Home() {
       )}
       <button className="bg-black text-white p-4 rounded" onClick={handleClick} disabled={countdown !== null}>
         Go to Page
+      </button>
+      <button className="bg-black text-white p-4 rounded" onClick={openApp} disabled={countdown !== null}>
+       Open Deeplink
       </button>
     </div>
   );
