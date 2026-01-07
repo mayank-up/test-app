@@ -52,9 +52,9 @@ export default function Home() {
       <button className="bg-black text-white p-4 rounded" onClick={handleClick} disabled={countdown !== null}>
         Go to Page
       </button>
-      <button className="bg-black text-white p-4 rounded" onClick={openApp} disabled={countdown !== null}>
+      {/* <button className="bg-black text-white p-4 rounded" onClick={openApp} disabled={countdown !== null}>
        Open Deeplink
-      </button>
+      </button> */}
     </div>
   );
 }
