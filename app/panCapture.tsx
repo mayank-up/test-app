@@ -13,19 +13,31 @@ export default function PanCapture() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const startCamera = async (): Promise<void> => {
+    console.log(videoRef.current,"hbhbhbh")
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' },
+        video: { 
+          facingMode: 'environment',
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        },
         audio: false
       });
-      
+      console.log(videoRef.current, mediaStream)
       setStream(mediaStream);
       setCameraActive(true);
-      
+      console.log(videoRef.current, mediaStream)
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
+
+        console.log(videoRef.current, mediaStream)
+        // Wait for video to be ready
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current?.play();
+        };
       }
     } catch (error) {
+        console.log(videoRef.current,"hbhbhbh")
       console.error('Error accessing camera:', error);
       alert('Unable to access camera. Please check permissions.');
     }
@@ -128,12 +140,14 @@ export default function PanCapture() {
 
             {cameraActive && (
               <div className="space-y-4">
-                <div className="relative bg-black rounded-lg overflow-hidden">
+                <div className="relative bg-black rounded-lg overflow-hidden" style={{ minHeight: '400px' }}>
                   <video
                     ref={videoRef}
                     autoPlay
                     playsInline
-                    className="w-full h-auto"
+                    muted
+                    className="w-full h-auto block"
+                    style={{ objectFit: 'cover', minHeight: '400px' }}
                   />
                   <button
                     onClick={stopCamera}

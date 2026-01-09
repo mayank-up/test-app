@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { useState, useRef } from 'react';
 
 interface CapturedImageData {
@@ -17,13 +17,14 @@ export default function PanCapture() {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment' },
-        audio: false
+        audio: false,
       });
-      
+
       setStream(mediaStream);
       setCameraActive(true);
-      
+      console.log(videoRef.current, mediaStream, 'hbhbhbh');
       if (videoRef.current) {
+        console.log(videoRef.current, 'hbhbhbh 222');
         videoRef.current.srcObject = mediaStream;
       }
     } catch (error) {
@@ -34,7 +35,7 @@ export default function PanCapture() {
 
   const stopCamera = (): void => {
     if (stream) {
-      stream.getTracks().forEach(track => track.stop());
+      stream.getTracks().forEach((track) => track.stop());
       setStream(null);
     }
     setCameraActive(false);
@@ -43,25 +44,29 @@ export default function PanCapture() {
   const capturePhoto = (): void => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    
+
     if (video && canvas) {
       const context = canvas.getContext('2d');
       if (!context) return;
-      
+
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      
+
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      
-      canvas.toBlob((blob) => {
-        if (!blob) return;
-        const file = new File([blob], 'pan-capture.jpg', { type: 'image/jpeg' });
-        setCapturedImage({
-          url: canvas.toDataURL('image/jpeg'),
-          file: file
-        });
-        stopCamera();
-      }, 'image/jpeg', 0.95);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return;
+          const file = new File([blob], 'pan-capture.jpg', { type: 'image/jpeg' });
+          setCapturedImage({
+            url: canvas.toDataURL('image/jpeg'),
+            file: file,
+          });
+          stopCamera();
+        },
+        'image/jpeg',
+        0.95
+      );
     }
   };
 
@@ -72,7 +77,7 @@ export default function PanCapture() {
         name: capturedImage.file.name,
         size: capturedImage.file.size,
         type: capturedImage.file.type,
-        lastModified: capturedImage.file.lastModified
+        lastModified: capturedImage.file.lastModified,
       });
     }
   };
@@ -112,80 +117,45 @@ export default function PanCapture() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
-                <h2 className="text-xl font-semibold text-gray-800 mb-3">
-                  Ready to Capture
-                </h2>
-                <p className="text-gray-600 mb-6">
-                  Click the button below to open your camera
-                </p>
-                <button
-                  onClick={startCamera}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
-                >
+                <h2 className="text-xl font-semibold text-gray-800 mb-3">Ready to Capture</h2>
+                <p className="text-gray-600 mb-6">Click the button below to open your camera</p>
+                <button onClick={startCamera} className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl">
                   Capture PAN
                 </button>
               </div>
             )}
 
-            {cameraActive && (
-              <div className="space-y-4">
-                <div className="relative bg-black rounded-lg overflow-hidden">
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    className="w-full h-auto"
-                  />
-                  <button
-                    onClick={stopCamera}
-                    className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-                <button
-                  onClick={capturePhoto}
-                  className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg"
-                >
-                  Take Picture
+            <div className="space-y-4" style={{ display: cameraActive ? 'inline' : 'none' }}>
+              <div className="relative bg-black rounded-lg overflow-hidden">
+                <video ref={videoRef} autoPlay playsInline className="w-full h-auto" />
+                <button onClick={stopCamera} className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               </div>
-            )}
+              <button onClick={capturePhoto} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg">
+                Take Picture
+              </button>
+            </div>
 
             {capturedImage && (
               <div className="space-y-4">
                 <div className="relative bg-gray-100 rounded-lg overflow-hidden">
-                  <img
-                    src={capturedImage.url}
-                    alt="Captured"
-                    className="w-full h-auto"
-                  />
-                  <button
-                    onClick={closePreview}
-                    className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
-                  >
+                  <img src={capturedImage.url} alt="Captured" className="w-full h-auto" />
+                  <button onClick={closePreview} className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
                 </div>
                 <div className="text-center space-y-3">
-                  <p className="text-lg font-medium text-gray-700">
-                    Preview your capture
-                  </p>
+                  <p className="text-lg font-medium text-gray-700">Preview your capture</p>
                   <div className="flex gap-3">
-                    <button
-                      onClick={retakePhoto}
-                      className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
-                    >
+                    <button onClick={retakePhoto} className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
                       Retake
                     </button>
-                    <button
-                      onClick={handleMoveForward}
-                      className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg flex items-center justify-center gap-2"
-                    >
+                    <button onClick={handleMoveForward} className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg flex items-center justify-center gap-2">
                       Move Forward
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
